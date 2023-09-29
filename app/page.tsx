@@ -1,18 +1,20 @@
 "use client";
 import React, { useState } from 'react';
-import Results from './results';
-import LoadingIcon from './loading';
+import Results from './components/results';
+import LoadingIcon from './components/loading';
+
+type RequestData = {
+    file: File | null;
+    amount: number;
+    shipment: number;
+} 
 
 const HomePage: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
-  const [field1, setField1] = useState<number>(4);
-  const [field2, setField2] = useState<number>(48);
+  const [amount, setAmount] = useState<number>(4);
+  const [shipment, setShipment] = useState<number>(48);
   const [loading, setLoading] = useState<boolean>(false);
-  const [submittedData, setSubmittedData] = useState<{
-    file: File | null;
-    field1: number;
-    field2: number;
-  } | null>(null);
+  const [response, setResponse] = useState<any>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files && e.target.files[0];
@@ -28,15 +30,28 @@ const HomePage: React.FC = () => {
     setLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    // Handle form submission here, e.g., send data to the server
-    // You can access the uploaded file as 'file', field1 as 'field1', and field2 as 'field2'
-    const sd = {
-      file,
-      field1,
-      field2,
-    };
-    setSubmittedData(sd);
+    const response = await fetch('/api/opony', {
+        method: 'POST',
+        body: JSON.stringify({
+            file,
+            amount,
+            shipment,
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
     setLoading(false);
+
+    if (response.ok) {
+        const res = await response.json();
+        setResponse(res);
+        console.log(res);
+    } 
+    else {
+        setResponse(null);
+    }
   };
 
   return (
@@ -46,8 +61,8 @@ const HomePage: React.FC = () => {
              <div className="flex justify-center items-center mb-4">
               <LoadingIcon />
             </div>
-       ) : submittedData ? (
-          <Results {...submittedData} />
+       ) : response ? (
+          <Results {...response} />
         ) : (
           <div>
             <h1 className="text-2xl font-bold mb-4 text-gray-800">Daj mi te oponki</h1>
@@ -71,8 +86,8 @@ const HomePage: React.FC = () => {
                 <input
                   type="number"
                   id="field1"
-                  value={field1}
-                  onChange={(e) => setField1(Number.parseInt(e.target.value))}
+                  value={amount}
+                  onChange={(e) => setAmount(Number.parseInt(e.target.value))}
                   className="mt-1 border border-gray-300 p-2 rounded-md text-black"
                 />
               </div>
@@ -83,8 +98,8 @@ const HomePage: React.FC = () => {
                 <input
                   type="number"
                   id="field2"
-                  value={field2}
-                  onChange={(e) => setField2(Number.parseInt(e.target.value))}
+                  value={shipment}
+                  onChange={(e) => setShipment(Number.parseInt(e.target.value))}
                   className="mt-1 border border-gray-300 p-2 rounded-md text-black"
                 />
               </div>
