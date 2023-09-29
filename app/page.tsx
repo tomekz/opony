@@ -3,18 +3,13 @@ import React, { useState } from 'react';
 import Results from './components/results';
 import LoadingIcon from './components/loading';
 
-type RequestData = {
-    file: File | null;
-    amount: number;
-    shipment: number;
-} 
-
 const HomePage: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [amount, setAmount] = useState<number>(4);
   const [shipment, setShipment] = useState<number>(48);
   const [loading, setLoading] = useState<boolean>(false);
-  const [response, setResponse] = useState<any>(null);
+  const [success, setSuccess] = useState<any>(null);
+  const [url, setUrl] = useState<any>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files && e.target.files[0];
@@ -41,15 +36,10 @@ const HomePage: React.FC = () => {
     });
 
     setLoading(false);
-
-    if (response.ok) {
-        const res = await response.json();
-        setResponse(res);
-        console.log(res);
-    } 
-    else {
-        setResponse(null);
-    }
+    const { success, url } = await response.json();
+    console.log({ success, url });
+    setSuccess(success);
+    setUrl(url);
   };
 
   return (
@@ -59,8 +49,8 @@ const HomePage: React.FC = () => {
              <div className="flex justify-center items-center mb-4">
               <LoadingIcon />
             </div>
-       ) : response ? (
-          <Results {...response} />
+       ) : success ? (
+          <Results url={url} />
         ) : (
           <div>
             <h1 className="text-2xl font-bold mb-4 text-gray-800">Daj mi te oponki</h1>
@@ -73,6 +63,7 @@ const HomePage: React.FC = () => {
                   type="file"
                   id="file"
                   accept=".xlsx, .xls"
+                  required
                   onChange={handleFileChange}
                   className="mt-1 border border-gray-300 p-2 rounded-md text-black"
                 />
