@@ -30,16 +30,14 @@ const HomePage: React.FC = () => {
     setLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
+    const formData = new FormData();
+    formData.set('file', file as Blob);
+    formData.set('amount', amount.toString());
+    formData.set('shipment', shipment.toString());
+
     const response = await fetch('/api/opony', {
         method: 'POST',
-        body: JSON.stringify({
-            file,
-            amount,
-            shipment,
-        }),
-        headers: {
-            'Content-Type': 'application/json'
-        }
+        body: formData,
     });
 
     setLoading(false);
