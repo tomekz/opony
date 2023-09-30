@@ -5,8 +5,8 @@ import LoadingIcon from './components/loading';
 
 const HomePage: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
-  const [amount, setAmount] = useState<number>(4);
-  const [shipment, setShipment] = useState<number>(48);
+  const [producer, setProducer] = useState<string>('');
+  // const [shipment, setShipment] = useState<number>(48);
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<any>(null);
   const [url, setUrl] = useState<any>(null);
@@ -21,14 +21,12 @@ const HomePage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Simulate loading time for 1 second
     setLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     const formData = new FormData();
     formData.set('file', file as Blob);
-    formData.set('amount', amount.toString());
-    formData.set('shipment', shipment.toString());
+    formData.set('producer', producer.toString());
+    // formData.set('shipment', shipment.toString());
 
     const response = await fetch('/api/opony', {
         method: 'POST',
@@ -37,7 +35,6 @@ const HomePage: React.FC = () => {
 
     setLoading(false);
     const { success, url } = await response.json();
-    console.log({ success, url });
     setSuccess(success);
     setUrl(url);
   };
@@ -70,25 +67,14 @@ const HomePage: React.FC = () => {
               </div>
               <div className="flex flex-col">
                 <label htmlFor="field1" className="font-semibold text-gray-800">
-                  Ilość opon:
+                  Producent:
                 </label>
                 <input
-                  type="number"
-                  id="field1"
-                  value={amount}
-                  onChange={(e) => setAmount(Number.parseInt(e.target.value))}
-                  className="mt-1 border border-gray-300 p-2 rounded-md text-black"
-                />
-              </div>
-              <div className="flex flex-col">
-                <label htmlFor="field2" className="font-semibold text-gray-800">
-                  Czas dostawy:
-                </label>
-                <input
-                  type="number"
-                  id="field2"
-                  value={shipment}
-                  onChange={(e) => setShipment(Number.parseInt(e.target.value))}
+                  type="text"
+                  id="producer"
+                  required
+                  value={producer}
+                  onChange={(e) => setProducer(e.target.value)}
                   className="mt-1 border border-gray-300 p-2 rounded-md text-black"
                 />
               </div>
@@ -107,4 +93,3 @@ const HomePage: React.FC = () => {
 };
 
 export default HomePage;
-

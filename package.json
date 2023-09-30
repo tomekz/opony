@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate": "wsdl-tsclient ./soap/soap.wsdl -o ./soap/generated"
   },
   "dependencies": {
     "@types/node": "20.6.3",
@@ -17,12 +18,17 @@
     "eslint": "8.50.0",
     "eslint-config-next": "13.5.2",
     "formidable": "^3.5.1",
+    "md5": "^2.3.0",
     "next": "13.5.2",
+    "node-xlsx": "^0.23.0",
     "postcss": "8.4.30",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "soap": "^1.0.0",
     "tailwindcss": "3.3.3",
-    "typescript": "5.2.2"
+    "typescript": "5.2.2",
+    "wsdl-to-ts": "^0.2.3",
+    "wsdl-tsclient": "^1.4.0"
   },
   "devDependencies": {
     "@types/formidable": "^3.4.3"

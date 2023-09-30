@@ -1,0 +1,696 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="webApi" targetNamespace="https://platformaopon.pl/external-api/1.0/webApi"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="https://platformaopon.pl/external-api/1.0/webApi"
+                  xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns='http://schemas.xmlsoap.org/wsdl/'
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" >
+
+    <!-- Typy  -->
+    <wsdl:types>
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="https://platformaopon.pl/external-api/1.0/webApi">
+            <xsd:complexType name="Label">
+                <xsd:sequence>
+                    <xsd:element name="number" type="xsd:string" />
+                    <xsd:element name="content" type="xsd:string" />
+                    <xsd:element name="extension" type="xsd:string" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="Comment">
+                <xsd:sequence>
+                    <xsd:element name="orderId" type="xsd:string" />
+                    <xsd:element name="product" type="xsd:string" />
+                    <xsd:element name="toWho" type="xsd:string" />
+                    <xsd:element name="commentAs" type="xsd:string"/>
+                    <xsd:element name="secondSideComment" type="xsd:string" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="Protocol">
+                <xsd:sequence>
+                    <xsd:element name="number" type="xsd:string" />
+                    <xsd:element name="content" type="xsd:string" />
+                    <xsd:element name="extension" type="xsd:string" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="AuthorizationObject">
+                <xsd:sequence>
+                    <xsd:element name="login" type="xsd:string" />
+                    <xsd:element name="hash" type="xsd:string" />
+                    <xsd:element name="key" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="mode" type="xsd:string" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="ShopOrder">
+                <xsd:sequence>
+                    <xsd:element name="ordId" type="xsd:string"/>
+                    <xsd:element name="ordUsrId" type="xsd:string"/>
+                    <xsd:element name="ordSofId" type="xsd:string"/>
+                    <xsd:element name="ordQuantity" type="xsd:string"/>
+                    <xsd:element name="ordAccepted" type="xsd:string"/>
+                    <xsd:element name="ordDate" type="xsd:string"/>
+                    <xsd:element name="ordInfo" type="xsd:string"/>
+                    <xsd:element name="ordCode" type="xsd:string"/>
+                    <xsd:element name="ordSellerComment" type="xsd:string"/>
+                    <xsd:element name="ordPaymentMethod" type="xsd:string"/>
+                    <xsd:element name="ordInvoicingMethod" type="xsd:string"/>
+                    <xsd:element name="ordContactPerson" type="xsd:string"/>
+                    <xsd:element name="ordAddressStreet" type="xsd:string"/>
+                    <xsd:element name="ordAddressZip" type="xsd:string"/>
+                    <xsd:element name="ordAddressCity" type="xsd:string"/>
+                    <xsd:element name="ordPersonalReceipt" type="xsd:string"/>
+                    <xsd:element name="ordDateConsidered" type="xsd:string"/>
+                    <xsd:element name="ordPrice" type="xsd:string"/>
+                    <xsd:element name="ordNotes" type="xsd:string"/>
+                    <xsd:element name="ordFromShop" type="xsd:string"/>
+                    <xsd:element name="ordContactEmail" type="xsd:string"/>
+                    <xsd:element name="ordContactPhone" type="xsd:string"/>
+                    <xsd:element name="ordInvId" type="xsd:string"/>
+                    <xsd:element name="ordForcedMargin" type="xsd:string"/>
+                    <xsd:element name="ordUncounted" type="xsd:string"/>
+                    <xsd:element name="ordUserFault" type="xsd:string"/>
+                    <xsd:element name="ordSprId" type="xsd:string"/>
+                    <xsd:element name="invoice" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="ResponseStatusObject">
+                <xsd:sequence>
+                    <xsd:element name="status" type="xsd:string"/>
+                    <xsd:element name="error" type="tns:ArrayOfErrors" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="mode" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="OffersCount">
+                <xsd:sequence>
+                    <xsd:element name="offersCount" type="xsd:string"/>
+                    <xsd:element name="pagesCount" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="SearchObjectExt">
+                <xsd:sequence>
+                    <xsd:element name="size" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="producer" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="category" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="amount" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="product_code" type="tns:ArrayOfProductCodes" maxOccurs="1" minOccurs="0" />
+                    <xsd:element name="priceMin" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="priceMax" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="type" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="capacity" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="speed" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="diameter" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="width" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="season" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="pcd" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="et" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="ml" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="page" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="name" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="model" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="description" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="productionYear" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="runflat" type="xsd:boolean" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="isRetreaded" type="xsd:boolean" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="perPage" type="xsd:int" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="sellerOfferIdentifier" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="Offer">
+                <xsd:sequence>
+                    <xsd:element name="number" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="product_code" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="name" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="producer" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="size" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="season" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="type" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="amount" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="price" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="speed" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="capacity" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="seller" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="url" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="ml" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="et" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="pct" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="sendInformation" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="extraInformation" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="realizationTime" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="description" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="productionYear" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="energyEfficiency" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="breakingInWet" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="volumeLevel" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="volumeLevelValue" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="runFlat" type="xsd:boolean" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="isRetreaded" type="xsd:boolean" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="snow" type="xsd:boolean" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="ice" type="xsd:boolean" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="eprel" type="xsd:int" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="demo" type="xsd:boolean" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="multiPack" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="sellerOfferIdentifier" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="paymentMethods" type="xsd:string" maxOccurs="1" minOccurs="0" />
+                    <xsd:element name="invoicingMethods" type="xsd:string" maxOccurs="1" minOccurs="0" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="ArrayOfProductCodes">
+                <xsd:complexContent>
+                    <xsd:restriction base="SOAP-ENC:Array">
+                        <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]" />
+                    </xsd:restriction>
+                </xsd:complexContent>
+            </xsd:complexType>
+            <xsd:complexType name="ArrayOfOffers">
+                <xsd:complexContent>
+                    <xsd:restriction base="SOAP-ENC:Array">
+                        <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Offer[]" />
+                    </xsd:restriction>
+                </xsd:complexContent>
+            </xsd:complexType>
+            <xsd:complexType name="ArrayOfOrders">
+                <xsd:complexContent>
+                    <xsd:restriction base="SOAP-ENC:Array">
+                        <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Order[]" />
+                    </xsd:restriction>
+                </xsd:complexContent>
+            </xsd:complexType>
+            <xsd:complexType name="ArrayOfSofId">
+                <xsd:complexContent>
+                    <xsd:restriction base="SOAP-ENC:Array">
+                        <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]" />
+                    </xsd:restriction>
+                </xsd:complexContent>
+            </xsd:complexType>
+            <xsd:complexType name="ArrayOfErrors">
+                <xsd:complexContent>
+                    <xsd:restriction base="SOAP-ENC:Array">
+                        <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]" />
+                    </xsd:restriction>
+                </xsd:complexContent>
+            </xsd:complexType>
+            <xsd:complexType name="ArrayOfShopOrders">
+                <xsd:complexContent>
+                    <xsd:restriction base="SOAP-ENC:Array">
+                        <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:ShopOrder[]" />
+                    </xsd:restriction>
+                </xsd:complexContent>
+            </xsd:complexType>
+            <xsd:complexType name="ImportingOffer">
+                <xsd:sequence>
+                    <xsd:element name="offerId" type="xsd:string"/>
+                    <xsd:element name="quantity" type="xsd:string"/>
+                    <xsd:element name="price" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="ArrayOfImportingOffers">
+                <xsd:complexContent>
+                    <xsd:restriction base="SOAP-ENC:Array">
+                        <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:ImportingOffer[]" />
+                    </xsd:restriction>
+                </xsd:complexContent>
+            </xsd:complexType>
+            <xsd:complexType name="ArrayOfComments">
+                <xsd:complexContent>
+                    <xsd:restriction base="SOAP-ENC:Array">
+                        <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Comment[]" />
+                    </xsd:restriction>
+                </xsd:complexContent>
+            </xsd:complexType>
+            <xsd:complexType name="NewOrder">
+                <xsd:sequence>
+                    <xsd:element name="offerId" type="xsd:string"/>
+                    <xsd:element name="amount" type="xsd:string"/>
+                    <xsd:element name="paymentMethod" type="xsd:string"/>
+                    <xsd:element name="invoicingMethod" type="xsd:string"/>
+                    <xsd:element name="differentContact" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="contactPerson" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="contactPhone" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="contactEmail" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="personalReception" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="differentAddress" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="addressStreet" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="addressZip" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="addressCity" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="comment" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="recipientName" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="UpdateOrder">
+                <xsd:sequence>
+                    <xsd:element name="orderId" type="xsd:int" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="courier" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="wayBill" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="Order">
+                <xsd:sequence>
+                    <xsd:element name="orderId" type="xsd:string"/>
+                    <xsd:element name="amount" type="xsd:string"/>
+                    <xsd:element name="status" type="xsd:string"/>
+                    <xsd:element name="date" type="xsd:string"/>
+                    <xsd:element name="paymentMethod" type="xsd:string"/>
+                    <xsd:element name="invoicingMethod" type="xsd:string"/>
+                    <xsd:element name="value" type="xsd:string" />
+                    <xsd:element name="contactPerson" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="contactPhone" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="contactEmail" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="personalReception" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="sendAddress" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="sendName" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="invoiceName" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="invoiceAddress" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="invoiceNip" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="comment" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="sellerComment" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="deliveryDate" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="code" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="offer" type="tns:Offer" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="courier" type="tns:Courier" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="hasInvoices" type="xsd:boolean"/>
+                    <xsd:element name="orderType" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="ShopOrdersSearch">
+                <xsd:sequence>
+                    <xsd:element name="customerName" type="xsd:string" maxOccurs="1" minOccurs="0">
+                    </xsd:element>
+                    <xsd:element name="productNumber" type="xsd:string" maxOccurs="1" minOccurs="0">
+                    </xsd:element>
+                    <xsd:element name="orderStatus" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="hideFinished" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="OrderSearch">
+                <xsd:sequence>
+                    <xsd:element name="orderId" type="xsd:string" maxOccurs="1" minOccurs="1"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="Courier">
+                <xsd:sequence>
+                    <xsd:element name="name" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="wayBill" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="InvoicesSearch">
+                <xsd:sequence>
+                    <xsd:element name="orderId" type="xsd:string" maxOccurs="1" minOccurs="1"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="Invoice">
+                <xsd:sequence>
+                    <xsd:element name="path" type="xsd:string"/>
+                    <xsd:element name="addedAt" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="NewInvoice">
+                <xsd:sequence>
+                    <xsd:element name="orderId" type="xsd:string"/>
+                    <xsd:element name="path" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="ArrayOfInvoices">
+                <xsd:complexContent>
+                    <xsd:restriction base="SOAP-ENC:Array">
+                        <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Invoice[]" />
+                    </xsd:restriction>
+                </xsd:complexContent>
+            </xsd:complexType>
+            <xsd:complexType name="UpdateMyOffer">
+                <xsd:sequence>
+                    <xsd:element name="sellerOfferIdentifier" type="xsd:string" maxOccurs="1" minOccurs="1"/>
+                    <xsd:element name="price" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                    <xsd:element name="quantity" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="MyOrdersFilters">
+                <xsd:sequence>
+                  <xsd:element name="dateFrom" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                  <xsd:element name="dateTo" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                  <xsd:element name="orderStatus" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+                  <xsd:element name="productCategory" type="xsd:string" maxOccurs="1" minOccurs="0"/>
+               </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+    </wsdl:types>
+    <wsdl:message name="searchOffersRequest">
+        <wsdl:part name="authorization" type="tns:AuthorizationObject" />
+        <wsdl:part name="searchParams" type="tns:SearchObjectExt" />
+    </wsdl:message>
+    <wsdl:message name="searchOffersResponse">
+        <wsdl:part name="responseStatus" type="tns:ResponseStatusObject" />
+        <wsdl:part name="offers" type="tns:ArrayOfOffers" />
+        <wsdl:part name="count" type="tns:OffersCount" />
+    </wsdl:message>
+    <wsdl:message name="myOffersRequest">
+        <wsdl:part name="authorization" type="tns:AuthorizationObject" />
+        <wsdl:part name="searchParams" type="tns:SearchObjectExt" />
+    </wsdl:message>
+    <wsdl:message name="myOffersResponse">
+        <wsdl:part name="responseStatus" type="tns:ResponseStatusObject" />
+        <wsdl:part name="offers" type="tns:ArrayOfOffers" />
+        <wsdl:part name="count" type="tns:OffersCount" />
+    </wsdl:message>
+    <wsdl:message name="showOfferRequest">
+        <wsdl:part name="authorization" type="tns:AuthorizationObject" />
+        <wsdl:part name="offerId" type="xsd:int" />
+    </wsdl:message>
+    <wsdl:message name="showOfferResponse">
+        <wsdl:part name="responseStatus" type="tns:ResponseStatusObject" />
+        <wsdl:part name="offerData" type="tns:Offer" />
+    </wsdl:message>
+    <wsdl:message name="newOrderRequest">
+        <wsdl:part name="authorization" type="tns:AuthorizationObject" />
+        <wsdl:part name="order" type="tns:NewOrder" />
+    </wsdl:message>
+    <wsdl:message name="newOrderResponse">
+        <wsdl:part name="responseStatus" type="tns:ResponseStatusObject" />
+        <wsdl:part name="message" type="xsd:string" />
+    </wsdl:message>
+    <wsdl:message name="updateOrderRequest">
+        <wsdl:part name="authorization" type="tns:AuthorizationObject" />
+        <wsdl:part name="order" type="tns:UpdateOrder" />
+    </wsdl:message>
+    <wsdl:message name="updateOrderResponse">
+        <wsdl:part name="responseStatus" type="tns:ResponseStatusObject" />
+        <wsdl:part name="message" type="xsd:string" />
+    </wsdl:message>
+    <wsdl:message name="changeOrderStatusRequest">
+        <wsdl:part name="authorization" type="tns:AuthorizationObject"/>
+        <wsdl:part name="orderId" type="xsd:int"/>
+        <wsdl:part name="status" type="xsd:string"/>
+        <wsdl:part name="comment" type="xsd:string"/>
+        <wsdl:part name="deliveryDate" type="xsd:string"/>
+        <wsdl:part name="wayBill" type="xsd:string"/>
+        <wsdl:part name="courier" type="xsd:string"/>
+    </wsdl:message>
+    <wsdl:message name="changeOrderStatusResponse">
+        <wsdl:part name="responseStatus" type="tns:ResponseStatusObject"/>
+        <wsdl:part name="message" type="xsd:string"/>
+    </wsdl:message>
+    <wsdl:message name="importOffersRequest1">
+        <wsdl:part name="authorization" type="tns:AuthorizationObject"/>
+        <wsdl:part name="importType" type="xsd:string"/>
+        <wsdl:part name="importData" type="tns:ArrayOfImportingOffers"/>
+    </wsdl:message>
+    <wsdl:message name="importOffersResponse1">
+        <wsdl:part name="responseStatus" type="tns:ResponseStatusObject"/>
+        <wsdl:part name="message" type="xsd:string"/>
+    </wsdl:message>
+    <wsdl:message name="ordersToRealizationRequest1">
+        <wsdl:part name="authorization" type="tns:AuthorizationObject"/>
+        <wsdl:part name="type" type="xsd:string"/>
+    </wsdl:message>
+    <wsdl:message name="ordersToRealizationResponse1">
+        <wsdl:part name="responseStatus" type="tns:ResponseStatusObject"/>
+        <wsdl:part name="orders" type="tns:ArrayOfOrders"/>
+    </wsdl:message>
+    <wsdl:message name="myOrdersRequest1">
+        <wsdl:part name="authorization" type="tns:AuthorizationObject"/>
+        <wsdl:part name="searchData" type="tns:MyOrdersFilters"/>
+    </wsdl:message>
+    <wsdl:message name="myOrdersResponse1">
+        <wsdl:part name="responseStatus" type="tns:ResponseStatusObject"/>
+        <wsdl:part name="orders" type="tns:ArrayOfOrders"/>
+    </wsdl:message>
+    <wsdl:message name="getOrderRequest1">
+        <wsdl:part name="authorization" type="tns:AuthorizationObject"/>
+        <wsdl:part name="searchData" type="tns:OrderSearch"/>
+    </wsdl:message>
+    <wsdl:message name="getOrderResponse1">
+        <wsdl:part name="responseStatus" type="tns:ResponseStatusObject"/>
+        <wsdl:part name="orders" type="tns:ArrayOfOrders"/>
+    </wsdl:message>
+    <wsdl:message name="getInvoicesRequest">
+        <wsdl:part name="authorization" type="tns:AuthorizationObject"/>
+        <wsdl:part name="searchData" type="tns:InvoicesSearch"/>
+    </wsdl:message>
+    <wsdl:message name="getInvoicesResponse">
+        <wsdl:part name="responseStatus" type="tns:ResponseStatusObject"/>
+        <wsdl:part name="invoices" type="tns:ArrayOfInvoices"/>
+    </wsdl:message>
+    <wsdl:message name="addInvoiceRequest">
+        <wsdl:part name="authorization" type="tns:AuthorizationObject"/>
+        <wsdl:part name="invoice" type="tns:NewInvoice"/>
+    </wsdl:message>
+    <wsdl:message name="addInvoiceResponse">
+        <wsdl:part name="responseStatus" type="tns:ResponseStatusObject"/>
+        <wsdl:part name="message" type="xsd:string"/>
+    </wsdl:message>
+    <wsdl:message name="updateMyOfferRequest">
+        <wsdl:part name="authorization" type="tns:AuthorizationObject" />
+        <wsdl:part name="offer" type="tns:UpdateMyOffer" />
+    </wsdl:message>
+    <wsdl:message name="updateMyOfferResponse">
+        <wsdl:part name="responseStatus" type="tns:ResponseStatusObject" />
+        <wsdl:part name="offerData" type="tns:Offer" />
+    </wsdl:message>
+
+    <wsdl:portType name="PlatformaOponPortType">
+        <wsdl:operation name="searchOffers">
+            <wsdl:input message="tns:searchOffersRequest"/>
+            <wsdl:output message="tns:searchOffersResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="myOffers">
+            <wsdl:input message="tns:myOffersRequest"/>
+            <wsdl:output message="tns:myOffersResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="showOffer">
+            <wsdl:input message="tns:showOfferRequest"/>
+            <wsdl:output message="tns:showOfferResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="newOrder">
+            <wsdl:input message="tns:newOrderRequest"/>
+            <wsdl:output message="tns:newOrderResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="updateOrder">
+            <wsdl:input message="tns:updateOrderRequest"/>
+            <wsdl:output message="tns:updateOrderResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="changeOrderStatus">
+            <wsdl:input message="tns:changeOrderStatusRequest"/>
+            <wsdl:output message="tns:changeOrderStatusResponse"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="importOffers">
+            <wsdl:input message="tns:importOffersRequest1"/>
+            <wsdl:output message="tns:importOffersResponse1"/>
+        </wsdl:operation>
+        <wsdl:operation name="ordersToRealization">
+            <wsdl:input message="tns:ordersToRealizationRequest1"/>
+            <wsdl:output message="tns:ordersToRealizationResponse1"/>
+        </wsdl:operation>
+        <wsdl:operation name="myOrders">
+            <wsdl:input message="tns:myOrdersRequest1"/>
+            <wsdl:output message="tns:myOrdersResponse1"/>
+        </wsdl:operation>
+        <wsdl:operation name="getOrder">
+            <wsdl:input message="tns:getOrderRequest1"/>
+            <wsdl:output message="tns:getOrderResponse1"/>
+        </wsdl:operation>
+        <wsdl:operation name="getInvoices">
+            <wsdl:input message="tns:getInvoicesRequest"/>
+            <wsdl:output message="tns:getInvoicesResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="addInvoice">
+            <wsdl:input message="tns:addInvoiceRequest"/>
+            <wsdl:output message="tns:addInvoiceResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="updateMyOffer">
+            <wsdl:input message="tns:updateMyOfferRequest"/>
+            <wsdl:output message="tns:updateMyOfferResponse"/>
+        </wsdl:operation>
+
+    </wsdl:portType>
+    <wsdl:binding name="platformaopon.pl" type="tns:PlatformaOponPortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
+
+        <wsdl:operation name="searchOffers">
+            <soap:operation soapAction="https://platformaopon.pl/external-api/1.0/webApi/searchOffers" />
+            <wsdl:input>
+                <soap:body use="encoded"
+                           namespace="https://platformaopon.pl/external-api/1.0/webApi"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="encoded"
+                           namespace="https://platformaopon.pl/external-api/1.0/webApi"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="myOffers">
+            <soap:operation soapAction="https://platformaopon.pl/external-api/1.0/webApi/myOffers" />
+            <wsdl:input>
+                <soap:body use="encoded"
+                           namespace="https://platformaopon.pl/external-api/1.0/webApi"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="encoded"
+                           namespace="https://platformaopon.pl/external-api/1.0/webApi"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="showOffer">
+            <soap:operation soapAction="https://platformaopon.pl/external-api/1.0/webApi/showOffer" />
+            <wsdl:input>
+                <soap:body use="encoded"
+                           namespace="https://platformaopon.pl/external-api/1.0/webApi"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="encoded"
+                           namespace="https://platformaopon.pl/external-api/1.0/webApi"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="newOrder">
+            <soap:operation soapAction="https://platformaopon.pl/external-api/1.0/webApi/newOrder" />
+            <wsdl:input>
+                <soap:body use="encoded"
+                           namespace="https://platformaopon.pl/external-api/1.0/webApi"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="encoded"
+                           namespace="https://platformaopon.pl/external-api/1.0/webApi"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="updateOrder">
+            <soap:operation soapAction="https://platformaopon.pl/external-api/1.0/webApi/updateOrder" />
+            <wsdl:input>
+                <soap:body use="encoded"
+                           namespace="https://platformaopon.pl/external-api/1.0/webApi"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="encoded"
+                           namespace="https://platformaopon.pl/external-api/1.0/webApi"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="changeOrderStatus">
+            <soap:operation soapAction="https://platformaopon.pl/external-api/1.0/webApi/changeOrderStatus" />
+            <wsdl:input>
+                <soap:body use="encoded"
+                           namespace="https://platformaopon.pl/external-api/1.0/webApi"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="encoded"
+                           namespace="https://platformaopon.pl/external-api/1.0/webApi"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="importOffers">
+            <soap:operation soapAction="https://platformaopon.pl/external-api/1.0/webApi/importOffers" />
+            <wsdl:input>
+                <soap:body use="encoded"
+                           namespace="https://platformaopon.pl/external-api/1.0/webApi"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="encoded"
+                           namespace="https://platformaopon.pl/external-api/1.0/webApi"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="ordersToRealization">
+            <soap:operation soapAction="https://platformaopon.pl/external-api/1.0/webApi/ordersToRealization" />
+            <wsdl:input>
+                <soap:body use="encoded"
+                           namespace="https://platformaopon.pl/external-api/1.0/webApi"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="encoded"
+                           namespace="https://platformaopon.pl/external-api/1.0/webApi"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="getOrder">
+            <soap:operation soapAction="https://platformaopon.pl/external-api/1.0/webApi/myOrders" />
+            <wsdl:input>
+                <soap:body use="encoded"
+                           namespace="https://platformaopon.pl/external-api/1.0/webApi"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="encoded"
+                           namespace="https://platformaopon.pl/external-api/1.0/webApi"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="myOrders">
+            <soap:operation soapAction="https://platformaopon.pl/external-api/1.0/webApi/myOrders" />
+            <wsdl:input>
+                <soap:body use="encoded"
+                           namespace="https://platformaopon.pl/external-api/1.0/webApi"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="encoded"
+                           namespace="https://platformaopon.pl/external-api/1.0/webApi"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="getInvoices">
+            <soap:operation soapAction="https://platformaopon.pl/external-api/1.0/webApi/getInvoices" />
+            <wsdl:input>
+                <soap:body use="encoded"
+                           namespace="https://platformaopon.pl/external-api/1.0/webApi"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="encoded"
+                           namespace="https://platformaopon.pl/external-api/1.0/webApi"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="addInvoice">
+            <soap:operation soapAction="https://platformaopon.pl/external-api/1.0/webApi/addInvoice" />
+            <wsdl:input>
+                <soap:body use="encoded"
+                           namespace="https://platformaopon.pl/external-api/1.0/webApi"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="encoded"
+                           namespace="https://platformaopon.pl/external-api/1.0/webApi"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="updateMyOffer">
+            <soap:operation soapAction="https://platformaopon.pl/external-api/1.0/webApi/updateMyOffer" />
+            <wsdl:input>
+                <soap:body use="encoded"
+                           namespace="https://platformaopon.pl/external-api/1.0/webApi"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="encoded"
+                           namespace="https://platformaopon.pl/external-api/1.0/webApi"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </wsdl:output>
+        </wsdl:operation>
+
+    </wsdl:binding>
+
+    <wsdl:service name="PlatformaOponwebApi">
+        <wsdl:port name="NewPort" binding="tns:platformaopon.pl">
+            <soap:address location="https://platformaopon.pl/external-api/1.0/webApi" />
+        </wsdl:port>
+    </wsdl:service>
+
+</wsdl:definitions>
