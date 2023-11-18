@@ -1,4 +1,4 @@
-import { Client as SoapClient, createClientAsync as soapCreateClientAsync } from "soap";
+import { Client as SClient, createClientAsync as soapCreateClientAsync } from "soap";
 import { SearchOffersRequest } from "./definitions/SearchOffersRequest";
 import { SearchOffersRequest1 } from "./definitions/SearchOffersRequest1";
 import { MyOffersRequest } from "./definitions/MyOffersRequest";
@@ -27,7 +27,7 @@ import { UpdateMyOfferRequest } from "./definitions/UpdateMyOfferRequest";
 import { UpdateMyOfferRequest1 } from "./definitions/UpdateMyOfferRequest1";
 import { PlatformaOponwebApi } from "./services/PlatformaOponwebApi";
 
-export interface SoapClient extends SoapClient {
+export interface SoapClient extends SClient {
     PlatformaOponwebApi: PlatformaOponwebApi;
     searchOffersAsync(searchOffersRequest: SearchOffersRequest): Promise<[result: SearchOffersRequest1, rawResponse: any, soapHeader: any, rawRequest: any]>;
     myOffersAsync(myOffersRequest: MyOffersRequest): Promise<[result: MyOffersRequest1, rawResponse: any, soapHeader: any, rawRequest: any]>;
