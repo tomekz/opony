@@ -59,8 +59,7 @@ export async function POST(request: NextRequest, res: NextResponse) {
                       key: currentTimeInSeconds.toString(),
                   } ,
                   searchParams: {
-                      // size: "195/65R15",
-                      producer: "Barum",
+                      producer,
                       perPage: 1000
                   }
                 }, async function(err: any, result: any) {
@@ -69,11 +68,11 @@ export async function POST(request: NextRequest, res: NextResponse) {
                 }
                     console.log({result});
                     console.log({count: result.count});
-                    // const { offers : {item}  } = result;
-                    // const output = augmentData(input, item);
+                    const { offers : {item}  } = result;
+                    const output = augmentData(input, item);
 
-                    // const buffer = xlsx.build([{name: "mySheetName", data: output}]); // Returns a buffer
-                    // const blob = await put("output_" + Date.now().toString() + ".xls", buffer, { access: 'public' });
+                    const buffer = xlsx.build([{name: "mySheetName", data: output}]); // Returns a buffer
+                    const blob = await put("output_" + Date.now().toString() + ".xls", buffer, { access: 'public' });
                     console.log({blob});
                     resolve(blob);
                     // return NextResponse.json({ success: true , url: res.url })
