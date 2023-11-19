@@ -137,7 +137,7 @@ const HomePage: React.FC = () => {
                   id="amount"
                   required
                   placeholder="4"
-                  value={amount}
+                  value={amount || 1}
                   onChange={(e) => setAmount(Number.parseInt(e.target.value))}
                   className="mt-1 border border-gray-300 p-2 rounded-md text-black"
                 />
