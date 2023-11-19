@@ -5,6 +5,7 @@ import LoadingIcon from './components/loading';
 
 const HomePage: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
+  const [amount, setAmount] = useState<number|null>(null);
   const [season, setSeason] = useState<string>('');
   const [size, setSize] = useState<string>('');
   const [type, setType] = useState<string>('');
@@ -28,6 +29,7 @@ const HomePage: React.FC = () => {
     const formData = new FormData();
     formData.set('file', file as Blob);
     formData.set('producer', producer.toString());
+    formData.set('amount', amount ? amount.toString() : '1');
     formData.set('season', season.toString());
     formData.set('size', size.toString());
     formData.set('type', type.toString());
@@ -78,7 +80,7 @@ const HomePage: React.FC = () => {
                   type="text"
                   id="producer"
                   required
-                  placeholder="Tracmax"
+                  placeholder="tracmax"
                   value={producer}
                   onChange={(e) => setProducer(e.target.value)}
                   className="mt-1 border border-gray-300 p-2 rounded-md text-black"
@@ -123,6 +125,20 @@ const HomePage: React.FC = () => {
                   placeholder="225/65R16"
                   value={size}
                   onChange={(e) => setSize(e.target.value)}
+                  className="mt-1 border border-gray-300 p-2 rounded-md text-black"
+                />
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="amount" className="font-semibold text-gray-800">
+                  Ilość:
+                </label>
+                <input
+                  type="text"
+                  id="amount"
+                  required
+                  placeholder="4"
+                  value={amount}
+                  onChange={(e) => setAmount(Number.parseInt(e.target.value))}
                   className="mt-1 border border-gray-300 p-2 rounded-md text-black"
                 />
               </div>

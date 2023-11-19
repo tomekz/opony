@@ -68,6 +68,7 @@ export async function POST(request: NextRequest) {
     const season  = data.get('season')
     const size  = data.get('size')
     const type  = data.get('type')
+    const amount  = data.get('amount')
     const fileContents = await blob.arrayBuffer()
 
     const workSheets = xlsx.parse(fileContents);
@@ -82,7 +83,7 @@ export async function POST(request: NextRequest) {
 
           const hash = getAuthKey("searchOffers", currentTimeInSeconds.toString());
 
-          console.info("searchOffersAsync begin", {producer, season, size, type, category: 'tyre', currentTimeInSeconds})
+          console.info("searchOffersAsync begin", {producer, season, size, type, amount, category: 'tyre', currentTimeInSeconds})
 
           client.searchOffersAsync({
                   authorization: {
@@ -95,6 +96,7 @@ export async function POST(request: NextRequest) {
                       season,
                       size,
                       type,
+                      amount,
                       category: 'tyre',
                       perPage: 1000
                   }
@@ -132,6 +134,7 @@ export async function POST(request: NextRequest) {
                                         season,
                                         size,
                                         type,
+                                        amount,
                                         category: 'tyre',
                                         perPage: 1000,
                                         page: i
