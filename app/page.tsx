@@ -5,8 +5,8 @@ import LoadingIcon from './components/loading';
 
 const HomePage: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
-  const [producer, setProducer] = useState<string>('');
-  // const [shipment, setShipment] = useState<number>(48);
+  const [season, setSeason] = useState<string>('lato');
+  const [producer, setProducer] = useState<string>('barum');
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<any>(null);
   const [url, setUrl] = useState<any>(null);
@@ -26,7 +26,7 @@ const HomePage: React.FC = () => {
     const formData = new FormData();
     formData.set('file', file as Blob);
     formData.set('producer', producer.toString());
-    // formData.set('shipment', shipment.toString());
+    formData.set('season', season.toString());
 
     const response = await fetch('/api/opony', {
         method: 'POST',
@@ -66,15 +66,30 @@ const HomePage: React.FC = () => {
                 />
               </div>
               <div className="flex flex-col">
-                <label htmlFor="field1" className="font-semibold text-gray-800">
+                <label htmlFor="producer" className="font-semibold text-gray-800">
                   Producent:
                 </label>
                 <input
                   type="text"
                   id="producer"
                   required
+                  placeholder="barum"
                   value={producer}
                   onChange={(e) => setProducer(e.target.value)}
+                  className="mt-1 border border-gray-300 p-2 rounded-md text-black"
+                />
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="season" className="font-semibold text-gray-800">
+                  Sezon:
+                </label>
+                <input
+                  type="text"
+                  id="season"
+                  required
+                  placeholder="lato"
+                  value={season}
+                  onChange={(e) => setSeason(e.target.value)}
                   className="mt-1 border border-gray-300 p-2 rounded-md text-black"
                 />
               </div>

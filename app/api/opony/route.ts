@@ -7,6 +7,7 @@ const soap = require('soap');
 function augmentData(xlsData : any[], apiResults : any[])  {
   const newData = xlsData.slice(1).map((row, i) => {
 
+    console.log({row: row[i], i});
     const match = apiResults.filter((item : any) => {
         const pCode = row[1];
         const productCodes  = item.product_code['$value']?.split(',');
@@ -17,6 +18,7 @@ function augmentData(xlsData : any[], apiResults : any[])  {
 
     let augment = [] as any[];
     if (match.length > 0) {
+        console.log("matches found ", match.length);
         augment = [match[0].price['$value'], match[0].amount['$value']]
     }
 
@@ -26,7 +28,7 @@ function augmentData(xlsData : any[], apiResults : any[])  {
   return newData;
 }
 
-export async function POST(request: NextRequest, res: NextResponse) {
+export async function POST(request: NextRequest) {
 
     const url = 'https://platformaopon.pl/webapi.wsdl'; 
     const currentTimeInSeconds = Math.floor(Date.now() / 1000);
@@ -34,10 +36,8 @@ export async function POST(request: NextRequest, res: NextResponse) {
     const data = await request.formData()
     const blob = data.get('file') as Blob
 
-    const file  = data.get('file') as File
     const producer  = data.get('producer')
-    // const shipment  = data.get('shipment')
-
+    const season  = data.get('season')
     const fileContents = await blob.arrayBuffer()
 
     const workSheets = xlsx.parse(fileContents);
@@ -52,6 +52,8 @@ export async function POST(request: NextRequest, res: NextResponse) {
 
           const hash = getAuthKey("searchOffers", currentTimeInSeconds.toString());
 
+          console.info("searchOffersAsync begin", {producer, season, currentTimeInSeconds})
+
           client.searchOffersAsync({
                   authorization: {
                       login: "motoabc",
@@ -60,22 +62,50 @@ export async function POST(request: NextRequest, res: NextResponse) {
                   } ,
                   searchParams: {
                       producer,
+                      season,
+                      category: 'tyre',
                       perPage: 1000
                   }
                 }, async function(err: any, result: any) {
                 if (err) {
+                    console.log("init request failed ",{err});
                     reject(err);
                 }
-                    console.log({result});
-                    console.log({count: result.count});
-                    const { offers : {item}  } = result;
-                    const output = augmentData(input, item);
+                    const results = []
+                    const { count: {pagesCount}, offers : {item}  } = result;
+                    const pagesCountVal = Number.parseInt(pagesCount["$value"])
+                    console.log({pagesCountVal});
 
+                    if (pagesCountVal !== 0) {
+                        results.push(...item);
+                        for (let i = 1; i < pagesCountVal; i++) {
+                            try {
+
+                                const [ pageResults ] = await client.searchOffersAsync({
+                                    authorization: {
+                                        login: "motoabc",
+                                        hash: hash,
+                                        key: currentTimeInSeconds.toString(),
+                                    } ,
+                                    searchParams: {
+                                        producer,
+                                        season,
+                                        category: 'tyre',
+                                        perPage: 1000,
+                                        page: i
+                                    }
+                                });
+                                results.push(...pageResults.offers.item);
+                            } catch (err) {
+                                console.log("failed request for page", {i, err});
+                                reject(err)
+                            }
+                        }
+                    }
+                    const output = augmentData(input, results);
                     const buffer = xlsx.build([{name: "mySheetName", data: output, options: {}}]);
-                    const blob = await put("output_" + Date.now().toString() + ".xls", buffer, { access: 'public' });
-                    console.log({blob});
+                    const blob = await put("output_" + new Date().toLocaleDateString() + new Date().toLocaleTimeString() + ".xls", buffer, { access: 'public' });
                     resolve(blob);
-                    // return NextResponse.json({ success: true , url: res.url })
                 });
             });
     });
