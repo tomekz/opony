@@ -5,10 +5,10 @@ import LoadingIcon from './components/loading';
 
 const HomePage: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
-  const [season, setSeason] = useState<string>('zima');
-  const [size, setSize] = useState<string>('225/65R16');
-  const [type, setType] = useState<string>('osobowe');
-  const [producer, setProducer] = useState<string>('Tracmax');
+  const [season, setSeason] = useState<string>('');
+  const [size, setSize] = useState<string>('');
+  const [type, setType] = useState<string>('');
+  const [producer, setProducer] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<any>(null);
   const [url, setUrl] = useState<any>(null);
