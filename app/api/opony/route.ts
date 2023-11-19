@@ -23,13 +23,25 @@ function augmentData(xlsData : any[], apiResults : any[])  {
             return (Number.parseFloat(prev.price['$value']) < Number.parseFloat(current.price['$value'])) ? prev : current
         })
 
-        console.log({lowestPricedOffer: lowestPricedOffer.url['$value']});
+        match.splice(match.indexOf(lowestPricedOffer), 1);
+
+        const nextLowestPricedOffer = match.reduce((prev : any, current : any) => {
+            return (Number.parseFloat(prev.price['$value']) < Number.parseFloat(current.price['$value'])) ? prev : current
+        })
+
+        console.log({lowestPricedOffer: lowestPricedOffer.url['$value'], nextLowestPricedOffer: nextLowestPricedOffer.url['$value']});
+
         augment = [
             lowestPricedOffer.price['$value'],
             lowestPricedOffer.amount['$value'],
             lowestPricedOffer.seller['$value'],
             lowestPricedOffer.name['$value'],
-            lowestPricedOffer.url['$value']
+            lowestPricedOffer.url['$value'],
+            nextLowestPricedOffer.price['$value'],
+            nextLowestPricedOffer.amount['$value'],
+            nextLowestPricedOffer.seller['$value'],
+            nextLowestPricedOffer.name['$value'],
+            nextLowestPricedOffer.url['$value'],
         ]
     }
     else {
@@ -48,7 +60,12 @@ function augmentData(xlsData : any[], apiResults : any[])  {
     "ilosc", // augmented
     "dostawca", // augmented
     "nazwa oferty", // augmented
-    "link do oferty" // augmented
+    "link do oferty", // augmented
+    "nastepna najniższa cena", // augmented
+    "nastepna ilosc", // augmented
+    "nastepny dostawca", // augmented
+    "nastepna nazwa oferty", // augmented
+    "nastepny link do oferty" // augmented
 ];
 
   newData.unshift(header);
