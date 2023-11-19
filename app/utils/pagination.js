@@ -38,7 +38,7 @@ async function search() {
                       // type: 'dostawcze',
                       category: 'tyre',
                       season: 'całoroczne',
-                      // size: '195/65R15',
+                      size: '195/65R15',
                       perPage: 1000
                   }
                 }, async function(err,  result) {
@@ -62,13 +62,10 @@ async function search() {
                                     key: currentTimeInSeconds.toString(),
                                 } ,
                                 searchParams: {
-                                    // producer: "barum",
                                     producer: "Tracmax",
-                                    // type: 'dostawcze',
                                     category: 'tyre',
-
-                                  season: 'całoroczne',
-                                    // size: '195/65R15',
+                                    season: 'całoroczne',
+                                    size: '195/65R15',
                                     perPage: 1000,
                                     page: i
                                 }

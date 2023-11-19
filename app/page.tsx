@@ -5,8 +5,10 @@ import LoadingIcon from './components/loading';
 
 const HomePage: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
-  const [season, setSeason] = useState<string>('lato');
-  const [producer, setProducer] = useState<string>('barum');
+  const [season, setSeason] = useState<string>('zima');
+  const [size, setSize] = useState<string>('225/65R16');
+  const [type, setType] = useState<string>('osobowe');
+  const [producer, setProducer] = useState<string>('Tracmax');
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<any>(null);
   const [url, setUrl] = useState<any>(null);
@@ -27,6 +29,8 @@ const HomePage: React.FC = () => {
     formData.set('file', file as Blob);
     formData.set('producer', producer.toString());
     formData.set('season', season.toString());
+    formData.set('size', size.toString());
+    formData.set('type', type.toString());
 
     const response = await fetch('/api/opony', {
         method: 'POST',
@@ -51,6 +55,7 @@ const HomePage: React.FC = () => {
         ) : (
           <div>
             <h1 className="text-2xl font-bold mb-4 text-gray-800">Daj mi te oponki</h1>
+            { success == false && <div className="text-red-500 mb-4">Nie ma ofert o tych parametrach </div> }
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="flex flex-col">
                 <label htmlFor="file" className="font-semibold text-gray-800">
@@ -73,9 +78,23 @@ const HomePage: React.FC = () => {
                   type="text"
                   id="producer"
                   required
-                  placeholder="barum"
+                  placeholder="Tracmax"
                   value={producer}
                   onChange={(e) => setProducer(e.target.value)}
+                  className="mt-1 border border-gray-300 p-2 rounded-md text-black"
+                />
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="producer" className="font-semibold text-gray-800">
+                  Typ:
+                </label>
+                <input
+                  type="text"
+                  id="type"
+                  required
+                  placeholder="osobowe"
+                  value={type}
+                  onChange={(e) => setType(e.target.value)}
                   className="mt-1 border border-gray-300 p-2 rounded-md text-black"
                 />
               </div>
@@ -87,9 +106,23 @@ const HomePage: React.FC = () => {
                   type="text"
                   id="season"
                   required
-                  placeholder="lato"
+                  placeholder="zima"
                   value={season}
                   onChange={(e) => setSeason(e.target.value)}
+                  className="mt-1 border border-gray-300 p-2 rounded-md text-black"
+                />
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="size" className="font-semibold text-gray-800">
+                  Rozmiar opon:
+                </label>
+                <input
+                  type="text"
+                  id="size"
+                  required
+                  placeholder="225/65R16"
+                  value={size}
+                  onChange={(e) => setSize(e.target.value)}
                   className="mt-1 border border-gray-300 p-2 rounded-md text-black"
                 />
               </div>
