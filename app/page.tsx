@@ -7,6 +7,7 @@ const HomePage: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [amount, setAmount] = useState<number|null>(null);
   const [season, setSeason] = useState<string>('');
+  const [secret, setSecret] = useState<string>('');
   const [size, setSize] = useState<string>('');
   const [type, setType] = useState<string>('');
   const [producer, setProducer] = useState<string>('');
@@ -23,6 +24,11 @@ const HomePage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (secret !== process.env.SECRET) {
+        alert('Niepoprawny sekret');
+        return;
+    }
 
     setLoading(true);
 
@@ -139,6 +145,19 @@ const HomePage: React.FC = () => {
                   placeholder="4"
                   value={amount || 1}
                   onChange={(e) => setAmount(Number.parseInt(e.target.value))}
+                  className="mt-1 border border-gray-300 p-2 rounded-md text-black"
+                />
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="amount" className="font-semibold text-gray-800">
+                  Sekret:
+                </label>
+                <input
+                  type="password"
+                  id="secret"
+                  required
+                  value={secret}
+                  onChange={(e) => setSecret(e.target.value)}
                   className="mt-1 border border-gray-300 p-2 rounded-md text-black"
                 />
               </div>
