@@ -10,3 +10,8 @@ export function getAuthKey (action: string, timestamp: string){
 
   return md5(login + timestamp + action + last4Chars)
 }
+
+export function checkSecret(secret: any) {
+    console.log({secret, envSecret: process.env.SECRET});
+    return secret === process.env.SECRET;
+}

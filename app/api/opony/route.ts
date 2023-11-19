@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { put } from '@vercel/blob';
-import { getAuthKey } from '../../utils';
+import { getAuthKey, checkSecret } from '../../utils';
 import xlsx from 'node-xlsx';
 const soap = require('soap');
 
@@ -73,14 +73,18 @@ function augmentData(xlsData : any[], apiResults : any[])  {
   return newData;
 }
 
-export async function POST(request: NextRequest) {
 
+export async function POST(request: NextRequest) {
     const url = 'https://platformaopon.pl/webapi.wsdl'; 
     const currentTimeInSeconds = Math.floor(Date.now() / 1000);
 
     const data = await request.formData()
-    const blob = data.get('file') as Blob
+    const secret  = data.get('secret')
+    if (!checkSecret(secret)) {
+        return NextResponse.json({ success: false , error: "Niepoprawny sekret" })
+    }
 
+    const blob = data.get('file') as Blob
     const producer  = data.get('producer')
     const season  = data.get('season')
     const size  = data.get('size')

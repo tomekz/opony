@@ -13,6 +13,7 @@ const HomePage: React.FC = () => {
   const [producer, setProducer] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<any>(null);
+  const [error, setError] = useState<any>(null);
   const [url, setUrl] = useState<any>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,11 +26,6 @@ const HomePage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (secret !== process.env.SECRET) {
-        alert('Niepoprawny sekret');
-        return;
-    }
-
     setLoading(true);
 
     const formData = new FormData();
@@ -39,6 +35,7 @@ const HomePage: React.FC = () => {
     formData.set('season', season.toString());
     formData.set('size', size.toString());
     formData.set('type', type.toString());
+    formData.set('secret', secret.toString());
 
     const response = await fetch('/api/opony', {
         method: 'POST',
@@ -46,7 +43,8 @@ const HomePage: React.FC = () => {
     });
 
     setLoading(false);
-    const { success, url } = await response.json();
+    const { success, error, url } = await response.json();
+    setError(error);
     setSuccess(success);
     setUrl(url);
   };
@@ -63,7 +61,7 @@ const HomePage: React.FC = () => {
         ) : (
           <div>
             <h1 className="text-2xl font-bold mb-4 text-gray-800">Daj mi te oponki</h1>
-            { success == false && <div className="text-red-500 mb-4">Nie ma ofert o tych parametrach </div> }
+            { success == false && <div className="text-red-500 mb-4"> {error} </div> }
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="flex flex-col">
                 <label htmlFor="file" className="font-semibold text-gray-800">
