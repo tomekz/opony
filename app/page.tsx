@@ -130,7 +130,7 @@ const HomePage: React.FC = () => {
               </div>
               <div className="flex flex-col">
                 <label htmlFor="amount" className="font-semibold text-gray-800">
-                  Ilość:
+                  Minimalna ilość opon w ofercie:
                 </label>
                 <input
                   type="text"
