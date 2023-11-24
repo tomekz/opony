@@ -5,7 +5,6 @@ import LoadingIcon from './components/loading';
 
 const HomePage: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
-  const [amount, setAmount] = useState<number|null>(null);
   const [season, setSeason] = useState<string>('');
   const [secret, setSecret] = useState<string>('');
   const [size, setSize] = useState<string>('');
@@ -31,7 +30,6 @@ const HomePage: React.FC = () => {
     const formData = new FormData();
     formData.set('file', file as Blob);
     formData.set('producer', producer.toString());
-    formData.set('amount', amount ? amount.toString() : '1');
     formData.set('season', season.toString());
     formData.set('size', size.toString());
     formData.set('type', type.toString());
@@ -91,20 +89,6 @@ const HomePage: React.FC = () => {
                 />
               </div>
               <div className="flex flex-col">
-                <label htmlFor="producer" className="font-semibold text-gray-800">
-                  Typ:
-                </label>
-                <input
-                  type="text"
-                  id="type"
-                  required
-                  placeholder="osobowe"
-                  value={type}
-                  onChange={(e) => setType(e.target.value)}
-                  className="mt-1 border border-gray-300 p-2 rounded-md text-black"
-                />
-              </div>
-              <div className="flex flex-col">
                 <label htmlFor="season" className="font-semibold text-gray-800">
                   Sezon:
                 </label>
@@ -119,13 +103,25 @@ const HomePage: React.FC = () => {
                 />
               </div>
               <div className="flex flex-col">
+                <label htmlFor="producer" className="font-semibold text-gray-800">
+                  Typ (opcjonalnie):
+                </label>
+                <input
+                  type="text"
+                  id="type"
+                  placeholder="osobowe"
+                  value={type}
+                  onChange={(e) => setType(e.target.value)}
+                  className="mt-1 border border-gray-300 p-2 rounded-md text-black"
+                />
+              </div>
+              <div className="flex flex-col">
                 <label htmlFor="size" className="font-semibold text-gray-800">
-                  Rozmiar opon:
+                  Rozmiar opon (opcjonalnie):
                 </label>
                 <input
                   type="text"
                   id="size"
-                  required
                   placeholder="225/65R16"
                   value={size}
                   onChange={(e) => setSize(e.target.value)}
@@ -133,21 +129,7 @@ const HomePage: React.FC = () => {
                 />
               </div>
               <div className="flex flex-col">
-                <label htmlFor="amount" className="font-semibold text-gray-800">
-                  Minimalna ilość opon w ofercie:
-                </label>
-                <input
-                  type="text"
-                  id="amount"
-                  required
-                  placeholder="4"
-                  value={amount || 1}
-                  onChange={(e) => setAmount(Number.parseInt(e.target.value))}
-                  className="mt-1 border border-gray-300 p-2 rounded-md text-black"
-                />
-              </div>
-              <div className="flex flex-col">
-                <label htmlFor="amount" className="font-semibold text-gray-800">
+                <label htmlFor="secret" className="font-semibold text-gray-800">
                   Sekret:
                 </label>
                 <input

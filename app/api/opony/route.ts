@@ -89,7 +89,6 @@ export async function POST(request: NextRequest) {
     const season  = data.get('season')
     const size  = data.get('size')
     const type  = data.get('type')
-    const amount  = data.get('amount')
     const fileContents = await blob.arrayBuffer()
 
     const workSheets = xlsx.parse(fileContents);
@@ -101,10 +100,17 @@ export async function POST(request: NextRequest) {
           if (err) {
             reject(err);
           }
-
           const hash = getAuthKey("searchOffers", currentTimeInSeconds.toString());
 
-          console.info("searchOffersAsync begin", {producer, season, size, type, amount, category: 'tyre', currentTimeInSeconds})
+          console.info("searchOffersAsync begin", {producer, season, type, size, category: 'tyre', currentTimeInSeconds})
+
+          const params =  { producer, season, type, size, category: 'tyre' } 
+          if (!size) {
+              delete params.size;
+          }
+          if (!type) {
+              delete params.type;
+          }
 
           client.searchOffersAsync({
                   authorization: {
@@ -112,26 +118,20 @@ export async function POST(request: NextRequest) {
                       hash: hash,
                       key: currentTimeInSeconds.toString(),
                   } ,
-                  searchParams: {
-                      producer,
-                      season,
-                      size,
-                      type,
-                      amount,
-                      category: 'tyre',
-                      perPage: 1000
+                  searchParams : {
+                      ...params
                   }
                 }, async function(err: any, result: any) {
                 if (err) {
                     console.log("init request failed ",{err});
                     reject(err);
                 }
-                    const results = []
+                    let results = []
                     const { count , offers : {item}  } = result;
                     const pagesCountVal = Number.parseInt(count.pagesCount["$value"])
-                    console.log({ count });
+                    console.log({count})
 
-                    if(item)
+                    if(item.length > 0)
                     {
                         results.push(...item);
                     } else {
@@ -141,40 +141,41 @@ export async function POST(request: NextRequest) {
 
 
                     if (pagesCountVal !== 0) {
+                        const promises = [];
                         for (let i = 1; i < pagesCountVal; i++) {
-                            try {
-
-                                const [ pageResults ] = await client.searchOffersAsync({
+                                promises.push(client.searchOffersAsync({
                                     authorization: {
                                         login: "motoabc",
                                         hash: hash,
                                         key: currentTimeInSeconds.toString(),
                                     } ,
                                     searchParams: {
-                                        producer,
-                                        season,
-                                        size,
-                                        type,
-                                        amount,
-                                        category: 'tyre',
-                                        perPage: 1000,
-                                        page: i
+                                        ...params,
+                                        page: i+1
                                     }
-                                });
-                                results.push(...pageResults.offers.item);
-                            } catch (err) {
-                                console.log("failed request for page", {i, err});
-                                reject(err)
-                            }
+                                }))
                         }
+                        await Promise.all(promises).then((values) => {
+                            values.forEach(([ pageResults ] : any) => {
+                                const { count , offers : {item}  } = pageResults  ;
+                                if(item)
+                                {
+                                    results.push(...item);
+                                } else {
+                                    console.log("no results found");
+                                    reject("no results found");
+                                }
+                            })
+                        })
                     }
 
                     const output = augmentData(input, results);
                     console.log("augmented data", {output});
-                    const sheetOptions = {'!cols': [{wch: 5}, {wch: 5}, {wch: 10}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}]};
+                    const sheetOptions = {'!cols': [{wch: 15}, {wch: 10}, {wch: 10}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 40}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 40}]};
                     const buffer = xlsx.build([{name: "wyniki", data: output, options: {}}], {sheetOptions});
-                    const blob = await put("wyniki_" + Date.now().toString() + ".xls", buffer, { access: 'public' });
-                    resolve(blob);
+                    // const blob = await put("wyniki_" + Date.now().toString() + ".xls", buffer, { access: 'public' });
+                    // resolve(blob);
+                    resolve({url: "https://platformaopon.pl/wyniki_" + Date.now().toString() + ".xls"})
                 });
             });
     });
