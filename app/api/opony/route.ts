@@ -168,7 +168,6 @@ export async function POST(request: NextRequest) {
                     }
 
                     const output = augmentData(input, results);
-                    console.log("augmented data", {output});
                     const sheetOptions = {'!cols': [{wch: 15}, {wch: 10}, {wch: 10}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 40}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 40}]};
                     const buffer = xlsx.build([{name: "wyniki", data: output, options: {}}], {sheetOptions});
                     const blob = await put("wyniki_" + Date.now().toString() + ".xls", buffer, { access: 'public' });
