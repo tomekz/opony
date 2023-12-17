@@ -92,6 +92,7 @@ export async function POST(request: NextRequest) {
 
     const blob = data.get('file') as Blob
     const producer  = data.get('producer')
+    const perPage = 1000
     const fileContents = await blob.arrayBuffer()
 
     const workSheets = xlsx.parse(fileContents);
@@ -107,7 +108,7 @@ export async function POST(request: NextRequest) {
 
           console.info("searchOffersAsync begin", {producer, category: 'tyre', currentTimeInSeconds})
 
-          const params =  { producer,category: 'tyre' } 
+          const params =  { producer,category: 'tyre', perPage } 
 
           client.searchOffersAsync({
                   authorization: {
