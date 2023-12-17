@@ -86,9 +86,6 @@ export async function POST(request: NextRequest) {
 
     const blob = data.get('file') as Blob
     const producer  = data.get('producer')
-    const season  = data.get('season')
-    const size  = data.get('size')
-    const type  = data.get('type')
     const fileContents = await blob.arrayBuffer()
 
     const workSheets = xlsx.parse(fileContents);
@@ -102,15 +99,9 @@ export async function POST(request: NextRequest) {
           }
           const hash = getAuthKey("searchOffers", currentTimeInSeconds.toString());
 
-          console.info("searchOffersAsync begin", {producer, season, type, size, category: 'tyre', currentTimeInSeconds})
+          console.info("searchOffersAsync begin", {producer, category: 'tyre', currentTimeInSeconds})
 
-          const params =  { producer, season, type, size, category: 'tyre' } 
-          if (!size) {
-              delete params.size;
-          }
-          if (!type) {
-              delete params.type;
-          }
+          const params =  { producer,category: 'tyre' } 
 
           client.searchOffersAsync({
                   authorization: {
@@ -157,7 +148,7 @@ export async function POST(request: NextRequest) {
                         }
                         await Promise.all(promises).then((values) => {
                             values.forEach(([ pageResults ] : any) => {
-                                const { count , offers : {item}  } = pageResults  ;
+                                const {  offers : {item}  } = pageResults  ;
                                 if(item)
                                 {
                                     results.push(...item);

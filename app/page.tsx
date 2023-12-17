@@ -30,9 +30,6 @@ const HomePage: React.FC = () => {
     const formData = new FormData();
     formData.set('file', file as Blob);
     formData.set('producer', producer.toString());
-    formData.set('season', season.toString());
-    formData.set('size', size.toString());
-    formData.set('type', type.toString());
     formData.set('secret', secret.toString());
 
     const response = await fetch('/api/opony', {
@@ -88,47 +85,7 @@ const HomePage: React.FC = () => {
                   className="mt-1 border border-gray-300 p-2 rounded-md text-black"
                 />
               </div>
-              <div className="flex flex-col">
-                <label htmlFor="season" className="font-semibold text-gray-800">
-                  Sezon:
-                </label>
-                <input
-                  type="text"
-                  id="season"
-                  required
-                  placeholder="zima"
-                  value={season}
-                  onChange={(e) => setSeason(e.target.value)}
-                  className="mt-1 border border-gray-300 p-2 rounded-md text-black"
-                />
-              </div>
-              <div className="flex flex-col">
-                <label htmlFor="producer" className="font-semibold text-gray-800">
-                  Typ (opcjonalnie):
-                </label>
-                <input
-                  type="text"
-                  id="type"
-                  placeholder="osobowe"
-                  value={type}
-                  onChange={(e) => setType(e.target.value)}
-                  className="mt-1 border border-gray-300 p-2 rounded-md text-black"
-                />
-              </div>
-              <div className="flex flex-col">
-                <label htmlFor="size" className="font-semibold text-gray-800">
-                  Rozmiar opon (opcjonalnie):
-                </label>
-                <input
-                  type="text"
-                  id="size"
-                  placeholder="225/65R16"
-                  value={size}
-                  onChange={(e) => setSize(e.target.value)}
-                  className="mt-1 border border-gray-300 p-2 rounded-md text-black"
-                />
-              </div>
-              <div className="flex flex-col">
+              <div className="flex-col">
                 <label htmlFor="secret" className="font-semibold text-gray-800">
                   Sekret:
                 </label>
