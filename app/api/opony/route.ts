@@ -7,7 +7,13 @@ const soap = require('soap');
 function augmentData(xlsData : any[], apiResults : any[])  {
   const newData = xlsData.slice(1,-1).map((row, i) => {
 
+    if (row.length < 1) {
+        return
+    }
     const productCode = row[1].toString().trim();
+    if (!productCode) {
+        return
+    }
     console.log({productCode, i});
     const match = apiResults.filter((item : any) => {
         const pCode = row[1].toString().trim();
